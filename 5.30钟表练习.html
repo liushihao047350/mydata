@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>钟表练习</title>
+    <style>
+        body{
+            text-align: center;
+        }
+        canvas{
+            background: #ddd;
+        }
+    </style>
+    <script type="text/javascript">
+    window.onload=function(){
+    var canvas=document.getElementsByTagName('canvas')[0];
+    var thr=canvas.getContext('2d');
+    var ol=10;
+    var oR=150;
+    var oX=300;
+    var oY=300;
+    //封装表盘绘制函数
+    function drawWitch(){
+        var color=thr.createRadialGradient(300,300,0,300,300,150);
+    color.addColorStop(0,'#797E7C');
+    color.addColorStop(0.5,'#9B17E5');
+    color.addColorStop(0.75,'#4F5561');
+    color.addColorStop(0.9,'#0A7EE8');
+    //绘制表盘
+     thr.beginPath();
+     thr.arc(oX,oY,oR,0,2*Math.PI,false)
+     thr.stroke();
+     thr.fillStyle=color;
+     thr.fill();
+     thr.closePath();
+    
+   //绘制刻度
+     var deg=0;
+  for (var i=0;i<60;i++){
+      deg=i*6;
+      if(i%5==0){
+          ol=10;
+          thr.strokeStyle='blueviolet';
+          thr.lineWidth=3;
+      }else {
+          ol=5;
+        thr.strokeStyle='#fff';
+        thr.lineWidth=2;
+
+      }
+      thr.beginPath();
+      thr.moveTo(oX+oR*Math.cos(deg/180*Math.PI),oY+oR*Math.sin(deg/180*Math.PI));
+      thr.lineTo(oX+(oR-ol)*Math.cos(deg/180*Math.PI),oY+(oR-ol)*Math.sin(deg/180*Math.PI));
+      thr.stroke();
+      thr.closePath();
+  };
+}
+  //绘制表针封装函数
+  drawWitch();
+
+
+  function drawmark(ml,mdeg,mcolor,mlinewidth){
+    
+      thr.beginPath();
+      thr.strokeStyle = mcolor;
+      thr.lineWidth = mlinewidth;
+      thr.moveTo(300,300);
+      thr.lineTo(300+ml*Math.cos(mdeg/180*Math.PI),300+ml*Math.sin(mdeg/180*Math.PI));
+      thr.stroke();
+      thr.closePath();
+  }
+  var date = new Date();
+ var Sdeg = date.getSeconds() * 6 - 90;
+ var Mdeg = date.getMinutes() * 6 - 90;
+ var Hdeg = date.getHours() * 30 - 90 + (date.getMinutes() * 6 / 12);
+  //画时针//
+drawmark(60,Hdeg,'#E8ED0D',4);
+//画分针//
+drawmark(100,Mdeg,'white',3);
+//画秒针//
+drawmark(140,Sdeg,'#f60',2);
+setInterval(function(){
+    thr.clearRect(0,0,600,600);
+    drawWitch();
+    var date = new Date();
+ var Sdeg = date.getSeconds() * 6 - 90;
+ var Mdeg = date.getMinutes() * 6 - 90;
+ var Hdeg = date.getHours() * 30 - 90 + (date.getMinutes() * 6 / 12);
+ drawmark(60,Hdeg,'#E8ED0D',4);
+
+drawmark(100,Mdeg,'white',3);
+
+drawmark(140,Sdeg,'#f60',2);
+drawHeart();
+},1000)
+
+function drawHeart(){
+    thr.beginPath();
+    thr.fillStyle='#000';
+    thr.arc(300,300,10,0,2*Math.PI,false);
+    thr.fill();
+    thr.closePath();
+
+
+    thr.beginPath();
+    thr.fillStyle='#ddd';
+    thr.arc(300,300,5,0,2*Math.PI,false);
+    thr.fill();
+    thr.closePath();
+}
+drawHeart();
+}
+    </script>
+</head>
+<body>
+    <canvas width="600" height="600"></canvas>
+    
+</body>
+</html>
